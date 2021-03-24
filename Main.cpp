@@ -4,15 +4,16 @@
 #include "Math.h"
 #include "Ball.h"
 #include "Canon.h"
+#include "CollisionManager.h"
+#include "Entity.h"
 
-bool hasButtonGotPressed;
+//Note pour plus tard : faire une classe Level qui store : Balle, (futures) Briques, Utils (?), Math (?), Canon, CollisionManager...
+void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Utils& utils, Math& math, Ball& mainBall, std::vector <Entity>& entities, CollisionManager collisionManager) {
 
-void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Utils& utils, Math& math, Ball& mainBall) {
-
-    while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte
+    while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte (=le vrai Update de Unity)
 
         mainWindow.clear();
-        float deltaTime = clock.getElapsedTime().asSeconds(); //frameTime
+        float deltaTime = clock.getElapsedTime().asSeconds(); //frametime
 
         while (mainWindow.pollEvent(event)) { //On attend un event de fermeture
             if (event.type == sf::Event::EventType::Closed) { //Si l'event est reçu, on ferme la fenêtre
@@ -21,34 +22,40 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ut
 
             if (event.type == sf::Event::EventType::MouseButtonPressed && mainBall.CheckIfReadyToBeLaunched()) {
 
-                hasButtonGotPressed = true;
+                mainBall.SetLaunched(true);
                 mainBall.SetSpeedDirection(math.CreateNormalizedVector(sf::Mouse::getPosition(mainWindow), mainBall.GetPosition()));
                 mainBall.SetReadyToLaunch(false);
             }
         }
 
-        if (hasButtonGotPressed) {
-
+        if (mainBall.CheckIfHasBeenLaunched()) {
             mainBall.SetPosition(mainBall.GetPosition() + mainBall.GetSpeedDirection() * deltaTime * mainBall.GetMoveSpeed());
+        }
+
+        if (collisionManager.ManageCollision(entities)) {
+            mainBall.SetReadyToLaunch(true);
         }
 
         mainWindow.draw(*mainBall.GetShape());
         mainWindow.display();
-        clock.restart(); //On reset la clock
+        clock.restart(); //On reset la clock pour obtenir le frametime
     }
 }
 
 void StartGame() {
 
-    Utils utils; //Objet aux méthodes et attributs divers
-    Math math;
-    sf::RenderWindow renderWindow(sf::VideoMode(utils._width, utils._height), "Le meilleur casse-brique du monde");
-    sf::Event event;
-    sf::Clock clock;
+    Utils _utils; //Objet aux méthodes et attributs divers
+    Math _math;
+    sf::RenderWindow _renderWindow(sf::VideoMode(_utils._width, _utils._height), "Le meilleur casse-brique du monde");
+    sf::Event _event;
+    sf::Clock _clock;
+    CollisionManager _collisionManager(_utils._width, _utils._height);
 
-    Ball _mainBall((utils._height / utils._width) * 10, sf::Vector2f(utils._width / 2, utils._height));
+    std::vector <Entity> _entities;
+    Ball _mainBall((_utils._height / _utils._width) * 10, sf::Vector2f(_utils._width / 2, _utils._height));
+    _entities.push_back(_mainBall);
 
-    Update(renderWindow, event, clock, utils, math, _mainBall);
+    Update(_renderWindow, _event, _clock, _utils, _math, _mainBall, _entities, _collisionManager);
 }
 
 int main()
