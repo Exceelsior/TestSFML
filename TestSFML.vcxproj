@@ -145,12 +145,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Canon.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Canon.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Utils.h" />

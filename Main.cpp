@@ -1,19 +1,13 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
-//#include "Utils.h"
-//#include "Ball.h"
+#include "Utils.h"
+#include "Math.h"
+#include "Ball.h"
+#include "Canon.h"
 
-int iLargeurFenetre = 480;
-int iHauteurFenetre = 720;
-int iBallSize = 20;
-int iBallRadius = (iHauteurFenetre / iLargeurFenetre) * iBallSize;
-sf::CircleShape ball(iBallRadius);
-float fLaunchSpeed = 500;
-bool bHasButtonGotPressed;
-bool bIsReadyToBeLaunched;
-sf::Vector2f v2StartPosition(iLargeurFenetre / 2, iHauteurFenetre);
+bool hasButtonGotPressed;
 
-void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock) {
+void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Utils& utils, Math& math, Ball& mainBall) {
 
     while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte
 
@@ -25,44 +19,39 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock) {
                 mainWindow.close();
             }
 
-            if (event.type == sf::Event::EventType::MouseButtonPressed && bIsReadyToBeLaunched) {
-                bHasButtonGotPressed = true;
-                bIsReadyToBeLaunched = false;
+            if (event.type == sf::Event::EventType::MouseButtonPressed && mainBall.CheckIfReadyToBeLaunched()) {
+
+                hasButtonGotPressed = true;
+                mainBall.SetSpeedDirection(math.CreateNormalizedVector(sf::Mouse::getPosition(mainWindow), mainBall.GetPosition()));
+                mainBall.SetReadyToLaunch(false);
             }
         }
 
-        if (bHasButtonGotPressed) {
-            ball.setPosition(sf::Vector2f(ball.getPosition().x, ball.getPosition().y - fLaunchSpeed * deltaTime));
+        if (hasButtonGotPressed) {
+
+            mainBall.SetPosition(mainBall.GetPosition() + mainBall.GetSpeedDirection() * deltaTime * mainBall.GetMoveSpeed());
         }
 
-        if (ball.getPosition().y < 0) {
-            ball.setPosition(v2StartPosition);
-            bIsReadyToBeLaunched = true;
-            bHasButtonGotPressed = false;
-        }
-
-        mainWindow.draw(ball);
+        mainWindow.draw(*mainBall.GetShape());
         mainWindow.display();
         clock.restart(); //On reset la clock
     }
 }
 
-void Start() {
+void StartGame() {
 
-    sf::RenderWindow renderWindow(sf::VideoMode(480, 720), "Ma premiere fenetre SFML");
+    Utils utils; //Objet aux méthodes et attributs divers
+    Math math;
+    sf::RenderWindow renderWindow(sf::VideoMode(utils._width, utils._height), "Le meilleur casse-brique du monde");
     sf::Event event;
     sf::Clock clock;
 
-    ball.setPosition(v2StartPosition);
-    ball.setOrigin(sf::Vector2f(ball.getLocalBounds().width / 2, ball.getLocalBounds().height));
-    ball.setFillColor(sf::Color(0, 255, 255, 255)); //On le colore en cyan
+    Ball _mainBall((utils._height / utils._width) * 10, sf::Vector2f(utils._width / 2, utils._height));
 
-    bIsReadyToBeLaunched = true;
-    Update(renderWindow, event, clock);
-    
+    Update(renderWindow, event, clock, utils, math, _mainBall);
 }
 
 int main()
 {
-    Start();
+    StartGame();
 }

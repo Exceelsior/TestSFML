@@ -6,13 +6,21 @@ class Entity {
 private:
 	float _positionX;
 	float _positionY;
+	sf::Shape* _shape;
 
 public:
 
-	//Constructeur
-	Entity(float positionX, float positionY)
+	//constructeur
+	Entity(float Xposition, float Yposition);
+
+	//destructeur
+	~Entity();
 
 
-	//Destructeur
+	void SetPosition(sf::Vector2f position);
+
+	sf::Vector2f GetPosition() { return sf::Vector2f(_positionX, _positionY); };
+	
+	sf::Shape* GetShape() { return _shape; };
 
 };

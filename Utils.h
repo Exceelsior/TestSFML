@@ -1,17 +1,14 @@
 #pragma once
+#include "SFML/Graphics.hpp"
 
-static class Utils {
-
-private:
-
-	
-
+class Utils {
 
 public:
 
-	int _width = 480;
-	int _height = 720;
+	const static int _width = 480;
+	const static int _height = 720;
 
-	float GetXR2P(float ERatioX) { return ERatioX * _width; }; //renvoie la position absolue de la position relative de l'entity 
-	float GetXR2P(float ERatioY) { return ERatioY * _height; }; //idem avec Y
+	float GetXR2P(float ERatioX) { return ERatioX * _width; }; //renvoie la position absolue en pixels de la position relative (à l'écran) de l'entity 
+	float GetYR2P(float ERatioY) { return ERatioY * _height; }; //idem avec Y
+	
 };
