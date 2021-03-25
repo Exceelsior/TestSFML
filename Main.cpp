@@ -1,14 +1,28 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
-#include "Utils.h"
 #include "Math.h"
 #include "Ball.h"
-#include "Canon.h"
-#include "CollisionManager.h"
-#include "Entity.h"
+
+void ConstructLevel(float rows, float columns) {
+
+    std::vector <Brick> _brickList;
+
+    for (int i = 0; i < rows; i++) {
+        
+        for (int j = 0; j < columns; j++) {
+
+            
+
+        }
+    }
+
+
+    //return une array de Bricks ?
+}
+
 
 //Note pour plus tard : faire une classe Level qui store : Balle, (futures) Briques, Utils (?), Math (?), Canon, CollisionManager...
-void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Utils& utils, Math& math, Ball& mainBall, std::vector <Entity>& entities, CollisionManager collisionManager) {
+void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ball& mainBall, Brick& brick) {
 
     while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte (=le vrai Update de Unity)
 
@@ -23,20 +37,25 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ut
             if (event.type == sf::Event::EventType::MouseButtonPressed && mainBall.CheckIfReadyToBeLaunched()) {
 
                 mainBall.SetLaunched(true);
-                mainBall.SetSpeedDirection(math.CreateNormalizedVector(sf::Mouse::getPosition(mainWindow), mainBall.GetPosition()));
+                mainBall.SetMoveDirection(CreateNormalizedVector(sf::Mouse::getPosition(mainWindow), mainBall.GetPosition()));
                 mainBall.SetReadyToLaunch(false);
             }
         }
 
         if (mainBall.CheckIfHasBeenLaunched()) {
-            mainBall.SetPosition(mainBall.GetPosition() + mainBall.GetSpeedDirection() * deltaTime * mainBall.GetMoveSpeed());
+            mainBall.SetPosition(mainBall.GetPosition() + mainBall.GetMoveDirection() * deltaTime * mainBall.GetMoveSpeed());
         }
 
-        if (collisionManager.ManageCollision(entities)) {
+        if (mainBall.CheckWallCollision()) {
             mainBall.SetReadyToLaunch(true);
+            mainBall.SetLaunched(false);
         }
+
+        mainBall.BrickCollision(brick);
+
 
         mainWindow.draw(*mainBall.GetShape());
+        mainWindow.draw(*brick.GetShape());
         mainWindow.display();
         clock.restart(); //On reset la clock pour obtenir le frametime
     }
@@ -44,18 +63,14 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ut
 
 void StartGame() {
 
-    Utils _utils; //Objet aux méthodes et attributs divers
-    Math _math;
-    sf::RenderWindow _renderWindow(sf::VideoMode(_utils._width, _utils._height), "Le meilleur casse-brique du monde");
+    sf::RenderWindow _renderWindow(sf::VideoMode(_windowWidth, _windowHeight), "Le meilleur casse-brique du monde");
     sf::Event _event;
     sf::Clock _clock;
-    CollisionManager _collisionManager(_utils._width, _utils._height);
 
-    std::vector <Entity> _entities;
-    Ball _mainBall((_utils._height / _utils._width) * 10, sf::Vector2f(_utils._width / 2, _utils._height));
-    _entities.push_back(_mainBall);
+    Ball _mainBall((_windowHeight / _windowWidth) * 10, sf::Vector2f(_windowWidth / 2, _windowHeight));
+    Brick _brick(sf::Vector2f(_windowWidth / 2, _windowHeight / 2), sf::Vector2f(50, 25));
 
-    Update(_renderWindow, _event, _clock, _utils, _math, _mainBall, _entities, _collisionManager);
+    Update(_renderWindow, _event, _clock, _mainBall, _brick);
 }
 
 int main()

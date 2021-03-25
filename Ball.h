@@ -1,10 +1,9 @@
 #pragma once
 #include "Entity.h"
-#include "Utils.h"
-#include "Canon.h"
+#include "Brick.h"
 
-class Ball:public Entity {
-	
+class Ball :public Entity {
+
 private:
 
 	int _ballSize = 20; //taille de base de la balle
@@ -15,13 +14,16 @@ private:
 	bool _isReadyToBeLaunched;
 	bool _hasBeenLaunched;
 
+
 public:
-	
+
 	//constructeur
 	Ball(float ballRadius, sf::Vector2f startPosition);
 
 	//destructeur
 	//???
+
+	sf::Vector2f GetStartPosition() { return _startPosition; };
 
 	void SetReadyToLaunch(bool isReady) { _isReadyToBeLaunched = isReady; };
 	bool CheckIfReadyToBeLaunched() { return _isReadyToBeLaunched; };
@@ -31,5 +33,8 @@ public:
 
 	float GetBallSize() { return _ballSize; };
 
+	bool CheckWallCollision();
+
+	void BrickCollision(Brick& brick);
 
 };

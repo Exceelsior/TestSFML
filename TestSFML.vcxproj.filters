@@ -33,10 +33,10 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
+    <ClCompile Include="Level.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Level.cpp">
+    <ClCompile Include="Brickcpp.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,10 +56,10 @@
     <ClInclude Include="Canon.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h">
+    <ClInclude Include="Level.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
+    <ClInclude Include="Brick.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
   </ItemGroup>

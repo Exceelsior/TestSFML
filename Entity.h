@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "Utils.h"
 
 class Entity {
 
@@ -7,7 +8,7 @@ private:
 	float _positionX;
 	float _positionY;
 
-	sf::Vector2f _speedDirection;
+	sf::Vector2f _moveDirection;
 	float _moveSpeed;
 
 protected:
@@ -25,8 +26,8 @@ public:
 	void SetPosition(sf::Vector2f position);
 	sf::Vector2f GetPosition() { return sf::Vector2f(_positionX, _positionY); };
 	
-	sf::Vector2f GetSpeedDirection() { return _speedDirection; };
-	void SetSpeedDirection(sf::Vector2f velocity) { _speedDirection = velocity; };
+	sf::Vector2f GetMoveDirection() { return _moveDirection; };
+	void SetMoveDirection(sf::Vector2f velocity) { _moveDirection = velocity; };
 
 	void SetMoveSpeed(float movespeed) { _moveSpeed = movespeed; };
 	float GetMoveSpeed() { return _moveSpeed; };
