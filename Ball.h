@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "Brick.h"
 
+//Classe Balle contenant les infos de rayon, de lancement, et les méthodes de collision
+
 class Ball :public Entity {
 
 private:

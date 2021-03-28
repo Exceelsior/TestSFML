@@ -3,25 +3,7 @@
 #include "Math.h"
 #include "Ball.h"
 
-void ConstructLevel(float rows, float columns) {
-
-    std::vector <Brick> _brickList;
-
-    for (int i = 0; i < rows; i++) {
-        
-        for (int j = 0; j < columns; j++) {
-
-            
-
-        }
-    }
-
-
-    //return une array de Bricks ?
-}
-
-
-//Note pour plus tard : faire une classe Level qui store : Balle, (futures) Briques, Utils (?), Math (?), Canon, CollisionManager...
+//Note pour plus tard : faire une classe Level qui store : Balle, (futures) Briques, Math (?), Canon, CollisionManager...
 void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ball& mainBall, Brick& brick) {
 
     while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte (=le vrai Update de Unity)

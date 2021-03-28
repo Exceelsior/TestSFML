@@ -2,6 +2,8 @@
 #include "SFML/Graphics.hpp"
 #include "Utils.h"
 
+//Classe Entité contenant les infos de position, vitesse, direction de déplacement, et forme
+
 class Entity {
 
 private:

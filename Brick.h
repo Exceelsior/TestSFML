@@ -1,13 +1,15 @@
 #pragma once
 #include "Entity.h"
 
+//Classe Brique contenant les infos de taille, vie et destruction
 
 class Brick : public Entity {
 
 private:
 
-	float _life;
+	int _life;
 	sf::Vector2f _size;
+	bool _hasBeenDestroyed;
 
 public:
 
