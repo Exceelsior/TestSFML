@@ -17,14 +17,12 @@ private:
 
 	int _ballDamages;
 
+	bool _hasBeenDestroyed;
 
 public:
 
 	//constructeur
 	Ball(float ballRadius, sf::Vector2f startPosition);
-
-	//destructeur
-	//???
 
 	sf::Vector2f GetStartPosition() { return _startPosition; };
 
@@ -39,5 +37,7 @@ public:
 	bool CheckWallCollision();
 
 	void BrickCollision(Brick& brick);
+
+	bool CheckIfHasBeenDestroyed() { return _hasBeenDestroyed; };
 
 };

@@ -3,15 +3,16 @@
 #include "Math.h"
 #include "Ball.h"
 #include "Canon.h"
+#include "Level.h"
 
 //Note pour plus tard : faire une classe Level qui store : Balle, (futures) Briques, Math (?), Canon, CollisionManager...
-void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ball& mainBall, Brick& brick, Canon& canon) {
+void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ball& mainBall, Level& level, Canon& canon) {
 
     while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte (=le vrai Update de Unity)
 
         mainWindow.clear();
         float deltaTime = clock.getElapsedTime().asSeconds(); //frametime
-
+        clock.restart(); //On reset la clock pour obtenir le frametime
         while (mainWindow.pollEvent(event)) { //On attend un event de fermeture
             if (event.type == sf::Event::EventType::Closed) { //Si l'event est reçu, on ferme la fenêtre
                 mainWindow.close();
@@ -36,15 +37,16 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ba
 
         RotateSpriteToMouse(*canon.GetShape(), mainWindow); //rotation du canon
 
-        if (!brick.CheckIfHasBeenDestroyed()) {
-            mainBall.BrickCollision(brick); //Collisions avec les briques
-            mainWindow.draw(*brick.GetShape());
-        }
+       
+        level.DrawLevel(mainWindow);
+        //mainBall.BrickCollision(brick); //Collisions avec les briques
+        //mainWindow.draw(*brick.GetShape());
+        
         
         mainWindow.draw(*mainBall.GetShape());
         mainWindow.draw(*canon.GetShape());
         mainWindow.display();
-        clock.restart(); //On reset la clock pour obtenir le frametime
+        
     }
 }
 
@@ -56,11 +58,11 @@ void StartGame() {
 
 
     
-    Brick _brick(sf::Vector2f(_windowWidth / 2, _windowHeight / 2), sf::Vector2f(50, 25), 4);
+    Level _level(10, 10);
     Canon _canon(sf::Vector2f(_windowWidth / 2, _windowHeight), sf::Vector2f((_windowHeight / _windowWidth) * 40, (_windowHeight / _windowWidth) * 80));
     Ball _mainBall((_windowHeight / _windowWidth) * 10, _canon.GetPosition());
 
-    Update(_renderWindow, _event, _clock, _mainBall, _brick, _canon);
+    Update(_renderWindow, _event, _clock, _mainBall, _level, _canon);
 }
 
 int main()

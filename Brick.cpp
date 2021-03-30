@@ -26,7 +26,9 @@ Brick::Brick(sf::Vector2f position, sf::Vector2f size, int life) : Entity(positi
     _life = life;
     _shape = new sf::RectangleShape(_size);
     ActualizeColors();
-    _shape->setOrigin(_shape->getLocalBounds().width / 2, _shape->getLocalBounds().height);
+    _shape->setOutlineThickness(2);
+    _shape->setOutlineColor(sf::Color::Black);
+    _shape->setOrigin(0, 0);
     SetPosition(position); //Méthode de la classe mère Entity
 
 }

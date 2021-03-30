@@ -57,13 +57,7 @@ void Ball::BrickCollision(Brick& brick) {
         _distances.push_back(_rightDistance);
         _distances.push_back(_leftDistance);
 
-        float _shortestDistance = std::numeric_limits<float>::infinity();
-
-        for (int i = 0; i < _distances.size(); i++) {
-            if (_distances[i] <= _shortestDistance) {
-                _shortestDistance = _distances[i];
-            }
-        }
+        float _shortestDistance = std::min({ _topDistance, _bottomDistance, _leftDistance, _rightDistance });
 
         if (_shortestDistance == _topDistance || _shortestDistance == _bottomDistance) {
             SetMoveDirection(sf::Vector2f(GetMoveDirection().x, -GetMoveDirection().y));
