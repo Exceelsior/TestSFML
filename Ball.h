@@ -8,13 +8,14 @@ class Ball :public Entity {
 
 private:
 
-	int _ballSize = 20; //taille de base de la balle
-	float _ballRadius; //taille en fonction de la taille de l'écran (est-ce vraiment utile ?)
+	float _ballRadius; //taille de la balle
 
 	sf::Vector2f _startPosition;
 
 	bool _isReadyToBeLaunched;
 	bool _hasBeenLaunched;
+
+	int _ballDamages;
 
 
 public:
@@ -33,7 +34,7 @@ public:
 	void SetLaunched(bool hasBeenLaunched) { _hasBeenLaunched = hasBeenLaunched; };
 	bool CheckIfHasBeenLaunched() { return _hasBeenLaunched; };
 
-	float GetBallSize() { return _ballSize; };
+	float GetBallRadius() { return _ballRadius; };
 
 	bool CheckWallCollision();
 

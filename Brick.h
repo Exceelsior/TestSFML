@@ -13,7 +13,14 @@ private:
 
 public:
 
+	void ActualizeColors();
+
 	//Constructeur
-	Brick(sf::Vector2f position, sf::Vector2f size);
+	Brick(sf::Vector2f position, sf::Vector2f size, int life);
+
+	void SetToDestroyed(bool isDestroyed) { _hasBeenDestroyed = isDestroyed; };
+	void TakeDamages(float damages);
+
+	bool CheckIfHasBeenDestroyed() { return _hasBeenDestroyed; };
 
 };

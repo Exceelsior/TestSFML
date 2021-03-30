@@ -4,6 +4,7 @@
 Ball::Ball(float ballRadius, sf::Vector2f startPosition) : Entity(_startPosition.x, _startPosition.y)
 {
     _ballRadius = ballRadius;
+    _ballDamages = 1;
     _shape = new sf::CircleShape(_ballRadius);
     _shape->setFillColor(sf::Color(0, 255, 255, 255)); //Pimp my ball
     _startPosition = startPosition;
@@ -70,5 +71,8 @@ void Ball::BrickCollision(Brick& brick) {
         else if (_shortestDistance == _leftDistance || _shortestDistance == _rightDistance) {
             SetMoveDirection(sf::Vector2f(-GetMoveDirection().x, GetMoveDirection().y));
         }
+
+        brick.TakeDamages(_ballDamages);
+   
     }
 }
