@@ -1,8 +1,9 @@
 #include "Ball.h"
 #include <iostream>
 
-Ball::Ball(float ballRadius, sf::Vector2f startPosition) : Entity(_startPosition.x, _startPosition.y)
+Ball::Ball(float ballRadius, sf::Vector2f startPosition, bool shotFromCanon) : Entity(_startPosition.x, _startPosition.y)
 {
+    _shotFromCanon = shotFromCanon;
     _ballRadius = ballRadius;
     _ballDamages = 1;
     _shape = new sf::CircleShape(_ballRadius);
@@ -12,6 +13,7 @@ Ball::Ball(float ballRadius, sf::Vector2f startPosition) : Entity(_startPosition
     SetPosition(startPosition); //Méthode de la classe mère Entity !
     SetMoveSpeed(500);
     _isReadyToBeLaunched = true;
+    _hasBeenDestroyed = false;
 
 }
 

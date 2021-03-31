@@ -5,8 +5,10 @@
 #include "Canon.h"
 #include "Level.h"
 
-//Note pour plus tard : faire une classe Level qui store : Balle, (futures) Briques, Math (?), Canon, CollisionManager...
-void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ball& mainBall, Level& level, Canon& canon) {
+
+void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Level& level) {
+
+    Ball* _mainBall = *level.GetBallList().begin();
 
     while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte (=le vrai Update de Unity)
 
@@ -18,33 +20,19 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ba
                 mainWindow.close();
             }
 
-            if (event.type == sf::Event::EventType::MouseButtonPressed && mainBall.CheckIfReadyToBeLaunched()) {
+            if (event.type == sf::Event::EventType::MouseButtonPressed && _mainBall->CheckIfReadyToBeLaunched()) {
 
-                mainBall.SetLaunched(true);
-                mainBall.SetMoveDirection(CreateNormalizedVector(sf::Mouse::getPosition(mainWindow), mainBall.GetPosition()));
-                mainBall.SetReadyToLaunch(false);
+                _mainBall->SetLaunched(true);
+                _mainBall->SetMoveDirection(CreateNormalizedVector(sf::Mouse::getPosition(mainWindow), _mainBall->GetPosition()));
+                _mainBall->SetReadyToLaunch(false);
             }
         }
 
-        if (mainBall.CheckIfHasBeenLaunched()) {
-            mainBall.SetPosition(mainBall.GetPosition() + mainBall.GetMoveDirection() * deltaTime * mainBall.GetMoveSpeed());
-        }
-
-        if (mainBall.CheckWallCollision()) {
-            mainBall.SetReadyToLaunch(true);
-            mainBall.SetLaunched(false);
-        }
-
-        RotateSpriteToMouse(*canon.GetShape(), mainWindow); //rotation du canon
-
-       
-        level.DrawLevel(mainWindow);
-        //mainBall.BrickCollision(brick); //Collisions avec les briques
-        //mainWindow.draw(*brick.GetShape());
         
-        
-        mainWindow.draw(*mainBall.GetShape());
-        mainWindow.draw(*canon.GetShape());
+        level.MoveAndCollideItems(mainWindow, deltaTime);
+        level.DrawLevel(mainWindow, deltaTime);
+
+
         mainWindow.display();
         
     }
@@ -59,10 +47,8 @@ void StartGame() {
 
     
     Level _level(10, 10);
-    Canon _canon(sf::Vector2f(_windowWidth / 2, _windowHeight), sf::Vector2f((_windowHeight / _windowWidth) * 40, (_windowHeight / _windowWidth) * 80));
-    Ball _mainBall((_windowHeight / _windowWidth) * 10, _canon.GetPosition());
 
-    Update(_renderWindow, _event, _clock, _mainBall, _level, _canon);
+    Update(_renderWindow, _event, _clock, _level);
 }
 
 int main()
