@@ -16,6 +16,6 @@ void Entity::SetPosition(sf::Vector2f position) {
 	_positionX = position.x; //est-ce que ça sert vraiment ?
 	_positionY = position.y;
 	_shape->setPosition(_positionX, _positionY);
+	
 }
-
 

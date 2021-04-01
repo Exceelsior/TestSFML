@@ -20,6 +20,8 @@ void Brick::ActualizeColors() {
 
 
 
+
+
 Brick::Brick(sf::Vector2f position, sf::Vector2f size, int life) : Entity(position.x, position.y) {
 
     _size = size;

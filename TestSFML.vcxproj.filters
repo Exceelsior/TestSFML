@@ -39,6 +39,12 @@
     <ClCompile Include="Brick.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="BrickMoving.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDisplay.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -61,6 +67,12 @@
     </ClInclude>
     <ClInclude Include="Brick.h">
       <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickMoving.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDisplay.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

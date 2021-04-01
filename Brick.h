@@ -16,6 +16,7 @@ public:
 	void ActualizeColors();
 
 	//Constructeur
+	
 	Brick(sf::Vector2f position, sf::Vector2f size, int life);
 
 	void SetToDestroyed(bool isDestroyed) { _hasBeenDestroyed = isDestroyed; };
