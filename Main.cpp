@@ -98,10 +98,6 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ba
             mainBall.SetPosition(mainBall.GetPosition() + mainBall.GetMoveDirection() *  mainBall.GetMoveSpeed());
         }
 
-        if (mainBall.CheckWallCollision()) {
-            mainBall.SetReadyToLaunch(true);
-            mainBall.SetLaunched(false);
-        }
 
         RotateSpriteToMouse(*canon.GetShape(), mainWindow); //rotation du canon
 

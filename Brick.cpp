@@ -24,11 +24,11 @@ void Brick::ActualizeColors() {
 
 Brick::Brick(sf::Vector2f position, sf::Vector2f size, int life) : Entity(position.x, position.y) {
 
-    _size = size;
     _life = life;
+    _size = size;
     _shape = new sf::RectangleShape(_size);
     ActualizeColors();
-    _shape->setOutlineThickness(2);
+    _shape->setOutlineThickness(-1);
     _shape->setOutlineColor(sf::Color::Black);
     _shape->setOrigin(0, 0);
     SetPosition(position); //Méthode de la classe mère Entity
