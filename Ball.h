@@ -1,6 +1,9 @@
 #pragma once
 #include "Entity.h"
 #include "Brick.h"
+#include <vector>
+#include <algorithm>
+
 
 //Classe Balle contenant les infos de rayon, de lancement, et les méthodes de collision
 
@@ -20,7 +23,6 @@ private:
 	bool _shotFromCanon;
 	bool _hasBeenDestroyed;
 
-
 public:
 
 	//constructeur
@@ -38,11 +40,10 @@ public:
 
 	bool CheckWallCollision();
 
-	void BrickCollision(Brick& brick);
+	void BrickCollision(Brick* brick);
 
 	void SetToDestroyed(bool isDestroyed) { _hasBeenDestroyed = isDestroyed; };
 	bool CheckIfHasBeenDestroyed() { return _hasBeenDestroyed; };
 
 	bool CheckIfShotFromCanon() { return _shotFromCanon; };
-
 };

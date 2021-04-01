@@ -8,8 +8,6 @@
 
 void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Level& level) {
 
-    Ball* _mainBall = *level.GetBallList().begin();
-
     while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte (=le vrai Update de Unity)
 
         mainWindow.clear();
@@ -20,14 +18,8 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Le
                 mainWindow.close();
             }
 
-            if (event.type == sf::Event::EventType::MouseButtonPressed && _mainBall->CheckIfReadyToBeLaunched()) {
-
-                _mainBall->SetLaunched(true);
-                _mainBall->SetMoveDirection(CreateNormalizedVector(sf::Mouse::getPosition(mainWindow), _mainBall->GetPosition()));
-                _mainBall->SetReadyToLaunch(false);
-            }
+            level.ShootBalls(event, mainWindow);
         }
-
         
         level.MoveAndCollideItems(mainWindow, deltaTime);
         level.DrawLevel(mainWindow, deltaTime);
@@ -40,13 +32,10 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Le
 
 void StartGame() {
 
-    sf::RenderWindow _renderWindow(sf::VideoMode(_windowWidth, _windowHeight), "Le meilleur casse-brique du monde");
+    sf::RenderWindow _renderWindow(sf::VideoMode(_windowWidth, _windowHeight), "Le casse-brique le plus instable du monde");
     sf::Event _event;
     sf::Clock _clock;
-
-
-    
-    Level _level(10, 10);
+    Level _level;
 
     Update(_renderWindow, _event, _clock, _level);
 }

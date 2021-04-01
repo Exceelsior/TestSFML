@@ -11,7 +11,7 @@ Ball::Ball(float ballRadius, sf::Vector2f startPosition, bool shotFromCanon) : E
     _startPosition = startPosition;
     _shape->setOrigin(_shape->getLocalBounds().width / 2, _shape->getLocalBounds().height);
     SetPosition(startPosition); //Méthode de la classe mère Entity !
-    SetMoveSpeed(500);
+    SetMoveSpeed(1000);
     _isReadyToBeLaunched = true;
     _hasBeenDestroyed = false;
 
@@ -19,20 +19,25 @@ Ball::Ball(float ballRadius, sf::Vector2f startPosition, bool shotFromCanon) : E
 
 bool Ball::CheckWallCollision() {
 
-    if (GetShape()->getGlobalBounds().left <= 0) {
+    bool _hasCollidedIntoWall = false;
+
+    if (GetShape()->getGlobalBounds().left <= 0 && !_hasCollidedIntoWall) {
+        _hasCollidedIntoWall = true;
         SetMoveDirection(sf::Vector2f(-GetMoveDirection().x, GetMoveDirection().y));
     }
 
-    else if (GetShape()->getGlobalBounds().width + GetShape()->getGlobalBounds().left >= _windowWidth) {
+    else if (GetShape()->getGlobalBounds().width + GetShape()->getGlobalBounds().left >= _windowWidth && !_hasCollidedIntoWall) {
+        _hasCollidedIntoWall = true;
         SetMoveDirection(sf::Vector2f(-GetMoveDirection().x, GetMoveDirection().y));
     }
 
-    else if (GetShape()->getGlobalBounds().top <= 0) {
+    else if (GetShape()->getGlobalBounds().top <= 0 && !_hasCollidedIntoWall) {
+        _hasCollidedIntoWall = true;
         SetMoveDirection(sf::Vector2f(GetMoveDirection().x, -GetMoveDirection().y));
     }
 
-    else if (GetShape()->getGlobalBounds().height + GetShape()->getGlobalBounds().top > _windowHeight) {
-
+    else if (GetShape()->getGlobalBounds().height + GetShape()->getGlobalBounds().top > _windowHeight && !_hasCollidedIntoWall) {
+        _hasCollidedIntoWall = true;
         SetPosition(sf::Vector2f(GetStartPosition()));
         SetMoveDirection(sf::Vector2f(0, 0));
         return true;
@@ -41,23 +46,20 @@ bool Ball::CheckWallCollision() {
 
 }
 
-void Ball::BrickCollision(Brick& brick) {
+void Ball::BrickCollision(Brick* brick) {
 
-    sf::Shape* _brickShape = brick.GetShape();
 
-    if (_shape->getGlobalBounds().intersects(_brickShape->getGlobalBounds())) {
+    sf::FloatRect _brickBounds = brick->GetShape()->getGlobalBounds();
+    sf::FloatRect _ballBounds = _shape->getGlobalBounds();
 
-        std::vector <float> _distances;
+    bool _hasCollidedIntoBrick = false;
 
-        float _topDistance = abs(_shape->getGlobalBounds().top + _shape->getGlobalBounds().height - _brickShape->getGlobalBounds().top);
-        float _bottomDistance = abs(_shape->getGlobalBounds().top - (_brickShape->getGlobalBounds().height + _brickShape->getGlobalBounds().top));
-        float _rightDistance = abs(_shape->getGlobalBounds().left - (_brickShape->getGlobalBounds().left + _brickShape->getGlobalBounds().width));
-        float _leftDistance = abs(_shape->getGlobalBounds().left + _shape->getGlobalBounds().width - _brickShape->getGlobalBounds().left);
+    if (_ballBounds.intersects(_brickBounds) && !_hasCollidedIntoBrick) {
 
-        _distances.push_back(_topDistance);
-        _distances.push_back(_bottomDistance);
-        _distances.push_back(_rightDistance);
-        _distances.push_back(_leftDistance);
+        float _topDistance = abs(_ballBounds.top + _ballBounds.height - _brickBounds.top);
+        float _bottomDistance = abs(_ballBounds.top - (_brickBounds.height + _brickBounds.top));
+        float _rightDistance = abs(_ballBounds.left - (_brickBounds.left + _brickBounds.width));
+        float _leftDistance = abs(_ballBounds.left + _ballBounds.width - _brickBounds.left);
 
         float _shortestDistance = std::min({ _topDistance, _bottomDistance, _leftDistance, _rightDistance });
 
@@ -68,7 +70,9 @@ void Ball::BrickCollision(Brick& brick) {
             SetMoveDirection(sf::Vector2f(-GetMoveDirection().x, GetMoveDirection().y));
         }
 
-        brick.TakeDamages(_ballDamages);
+        _hasCollidedIntoBrick = true;
+
+        brick->TakeDamages(_ballDamages);
    
     }
 }
