@@ -74,8 +74,8 @@ void GameDisplay::endgame() // Affichage de la fênetre de fin( Victoire ou Défai
         timesaver = false;
 
     }
-    clock.setString("Temps : " + std::to_string(static_cast<int>(endtime)));
-    pointscore.setString("Score: " + std::to_string(static_cast<int>(score)));
+    clock.setString("Temps : " + std::to_string((endtime)));
+    pointscore.setString("Score: " + std::to_string((score)));
 
     clock.setPosition(700, 60);
     pointscore.setPosition(200, 60);

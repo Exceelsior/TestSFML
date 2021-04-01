@@ -1,14 +1,10 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
-#include "Math.h"
-#include "Ball.h"
-#include "Canon.h"
 #include "Level.h"
-#include "BrickMoving.h"
 #include "GameDisplay.h"
 
 //Note pour plus tard : faire une classe Level qui store : Balle, (futures) Briques, Math (?), Canon, CollisionManager...
-void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ball& mainBall, Level& level, Canon& canon,  GameDisplay& game) {
+void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Level& level,  GameDisplay& game) {
 
     sf::Clock _clock;
     bool startmenu = true;
@@ -54,7 +50,9 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ba
             {
                 if (currentgame == true)
                 {
-                    level.DrawLevel(mainWindow);
+                    level.ShootBalls(event, mainWindow);
+                    level.MoveAndCollideItems(mainWindow, deltaTime);
+                    level.DrawLevel(mainWindow, deltaTime);
                     game.gui();
                     if (game.life <= 0) //|| level.instancebricks.size() <= 0)
                     {
@@ -77,40 +75,9 @@ void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Ba
                 triggerfrontmontant = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
             }
 
-            RotateSpriteToMouse(*canon.GetShape(), mainWindow);
-            mainWindow.draw(*mainBall.GetShape());
-            mainWindow.draw(*canon.GetShape());
             mainWindow.display();
             mainWindow.clear();
-     }
-            
-    
-    
-            if (event.type == sf::Event::EventType::MouseButtonPressed && mainBall.CheckIfReadyToBeLaunched()) {
-
-                mainBall.SetLaunched(true);
-                mainBall.SetMoveDirection(CreateNormalizedVector(sf::Mouse::getPosition(mainWindow), mainBall.GetPosition()));
-                mainBall.SetReadyToLaunch(false);
-            }
-        
-
-        if (mainBall.CheckIfHasBeenLaunched()) {
-            mainBall.SetPosition(mainBall.GetPosition() + mainBall.GetMoveDirection() *  mainBall.GetMoveSpeed());
-        }
-
-
-        RotateSpriteToMouse(*canon.GetShape(), mainWindow); //rotation du canon
-
-  
-        level.DrawLevel(mainWindow);
-        //mainBall.BrickCollision(brick); //Collisions avec les briques
-        //mainWindow.draw(*brick.GetShape());
-        
-        
-        mainWindow.draw(*mainBall.GetShape());
-        mainWindow.draw(*canon.GetShape());
-     
-        
+     }  
     
 }
 
@@ -120,18 +87,8 @@ void StartGame() {
     sf::Event _event;
     sf::Clock _clock;
     GameDisplay game(renderWindow, _clock);
-    bool startmenu = true;
-    bool currentgame = false;
-    bool endgame = false;
-    bool gamelaunch = false;
-    bool triggerfrontmontant = false;
-
-    //BrickMoving _BrickMoving(sf::Vector2f(_windowWidth / 2, _windowHeight), sf::Vector2f((_windowHeight / _windowWidth) * 40, (_windowHeight / _windowWidth) * 80));
-    Level _level(10, 10);
-    Canon _canon(sf::Vector2f(_windowWidth / 2, _windowHeight), sf::Vector2f((_windowHeight / _windowWidth) * 40, (_windowHeight / _windowWidth) * 80));
-    Ball _mainBall((_windowHeight / _windowWidth) * 10, _canon.GetPosition());
-
-    Update(renderWindow, _event, _clock, _mainBall, _level, _canon, game);
+    Level _level;
+    Update(renderWindow, _event, _clock, _level, game);
 }
 
 int main()
