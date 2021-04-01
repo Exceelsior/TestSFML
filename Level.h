@@ -32,7 +32,7 @@ private:
 	};
 
 
-public:
+    public:
 
 	Level();
 	void DrawLevel(sf::RenderWindow &window, float deltaTime);
