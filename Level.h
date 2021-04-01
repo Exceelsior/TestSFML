@@ -13,7 +13,8 @@ private:
 	std::list <Ball*> _ballList;
 	std::list <Ball*> _ammoList;
 
-	int _maxAmmo = 4;
+	int _magSize = 4;
+	int _maxAmmo = 20;
 	
 	Canon* _canon;
 

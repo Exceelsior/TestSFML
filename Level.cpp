@@ -23,7 +23,7 @@ Level::Level() {
 		sf::Vector2f((_windowHeight / _windowWidth) * 40, (_windowHeight / _windowWidth) * 80));
 	
 	//On crée et inclue les munitions du joueur à la liste des balles du niveau
-	for (int i = 0; i < _maxAmmo; i++) {
+	for (int i = 0; i < _magSize; i++) {
 		_ballList.push_back(new Ball((_windowHeight / _windowWidth) * 10, _canon->GetPosition(), true));
 	}
 	
@@ -68,7 +68,7 @@ void Level::MoveAndCollideItems(sf::RenderWindow& window, float deltaTime) {
 
 		Ball* currentBall = *_itBalls;
 
-		if (currentBall->CheckWallCollision()) {
+		if (currentBall->WallCollisions()) {
 
 			if (currentBall->CheckIfShotFromCanon()) {
 

@@ -17,7 +17,17 @@ Ball::Ball(float ballRadius, sf::Vector2f startPosition, bool shotFromCanon) : E
 
 }
 
-bool Ball::CheckWallCollision() {
+bool Ball::CheckIfCollidedWithWall(char &wall) {
+    if (std::find(_wallsCollided.begin(), _wallsCollided.end(), wall) != _wallsCollided.end()) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+bool Ball::WallCollisions() {
 
     bool _hasCollidedIntoWall = false;
 

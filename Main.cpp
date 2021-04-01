@@ -1,8 +1,5 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
-#include "Math.h"
-#include "Ball.h"
-#include "Canon.h"
 #include "Level.h"
 
 
