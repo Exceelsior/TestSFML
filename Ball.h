@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <string>
 #include <list>
+#include <iostream>
 
 //Classe Balle contenant les infos de rayon, de lancement, et les méthodes de collision
 
@@ -24,7 +25,10 @@ private:
 	bool _shotFromCanon;
 	bool _hasBeenDestroyed;
 
-	std::list <char> _wallsCollided;
+	bool _hasCollidedWithBrick; //booléen qui autorisera ou non la collision avec une brique
+	bool _hasCollidedWithWall; //idem avec les murs
+	std::list <char> _wallsCollided; //Liste des murs avec lesquelles la balle est rentrée en contact pendant 1 tour de boucle
+	std::list <Brick*> _bricksCollided; //idem avec les briques
 
 public:
 
@@ -54,5 +58,9 @@ public:
 
 	bool CheckIfShotFromCanon() { return _shotFromCanon; };
 
-	bool CheckIfCollidedWithWall(char &wall);
+	void ResetBricksCollisions();
+	void ResetWallsCollisions();
+
+	bool CheckIfCollidedWithWall(char wall);
+	bool CheckIfCollidedWithBrick(Brick* brick);
 };

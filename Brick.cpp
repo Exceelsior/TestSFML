@@ -1,5 +1,7 @@
 #include "Brick.h"
 
+
+
 void Brick::ActualizeColors() {
 
     switch (_life) {
@@ -26,6 +28,7 @@ Brick::Brick(sf::Vector2f position, sf::Vector2f size, int life) : Entity(positi
 
     _life = life;
     _size = size;
+    _scoreValue = life * 100;
     _shape = new sf::RectangleShape(_size);
     ActualizeColors();
     _shape->setOutlineThickness(-1);

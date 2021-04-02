@@ -1,98 +1,48 @@
 #include "SFML/Graphics.hpp"
 #include <iostream>
 #include "Level.h"
-#include "GameDisplay.h"
 
-//Note pour plus tard : faire une classe Level qui store : Balle, (futures) Briques, Math (?), Canon, CollisionManager...
-void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Level& level,  GameDisplay& game) {
+//Le main le plus clean du monde
 
-    sf::Clock _clock;
-    bool startmenu = true;
-    bool currentgame = false;
-    bool endgame = false;
-    bool gamelaunch = false;
-    bool triggerfrontmontant = false;
+void Update(sf::RenderWindow& mainWindow, sf::Event& event, sf::Clock& clock, Level& level) {
 
-    while (mainWindow.isOpen()) { //tant que la fenêtre est ouverte (=le vrai Update de Unity)
+    while (mainWindow.isOpen()) { //Boucle de jeu
 
-       // mainWindow.clear();
+        mainWindow.clear();
+
         float deltaTime = clock.getElapsedTime().asSeconds(); //frametime
         clock.restart(); //On reset la clock pour obtenir le frametime
 
-        while (mainWindow.pollEvent(event)) //On attend un event de fermeture
+        while (mainWindow.pollEvent(event)) //Boucle de réception des events
         {
-            if (event.type == sf::Event::EventType::Closed) { //Si l'event est reçu, on ferme la fenêtre
+            if (event.type == sf::Event::EventType::Closed) { //On peut fermer la fenêtre
                 mainWindow.close();
             }
+
+            level.HUDEvent(event); //On récupère l'appui sur la touche Espace au menu
+            level.ShootBalls(event, mainWindow); //On peut aussi tirer
         }
 
-            if (startmenu == true) // on rentre dans la fenetre de début
-            {
-                std::cout << "menu" << std::endl;
-                game.startofgame();
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) == true && triggerfrontmontant == false)
-                {
-                   startmenu = false;
-                   gamelaunch = true;
-                }
-                triggerfrontmontant = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
-            }
+        level.MoveAndCollideItems(deltaTime, mainWindow);
+        level.DrawLevel(deltaTime, mainWindow);
+        level.DrawHUD(mainWindow); //On peut aussi actualiser le HUD si besoin
 
-            if (gamelaunch == true) 
-            {
-                game = GameDisplay(mainWindow, _clock);
-                gamelaunch = false;
-                currentgame = true;
-                _clock.restart();
-                std::cout << "initialisation fini" << std::endl;
-            }
-            else
-            {
-                if (currentgame == true)
-                {
-                    level.ShootBalls(event, mainWindow);
-                    level.MoveAndCollideItems(mainWindow, deltaTime);
-                    level.DrawLevel(mainWindow, deltaTime);
-                    game.gui();
-                    if (game.life <= 0) //|| level.instancebricks.size() <= 0)
-                    {
-                       endgame = true;
-                       currentgame = false;
-                    }
-                }
-            }
-            
-            if (endgame == true)
-            {
-                game.endgame();
-
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) == true && triggerfrontmontant == false)
-                {
-                   startmenu = true;
-                   currentgame = false;
-                   endgame = false;
-                }
-                triggerfrontmontant = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
-            }
-
-            mainWindow.display();
-            mainWindow.clear();
-     }  
+        mainWindow.display();
+        
+    }
     
 }
 
 void StartGame() {
 
-    sf::RenderWindow renderWindow(sf::VideoMode(_windowWidth, _windowHeight), "Un casse brique hors du commun!!" , sf::Style::Close | sf::Style::Titlebar);
+    sf::RenderWindow _renderWindow(sf::VideoMode(_windowWidth, _windowHeight), "Un casse brique hors du commun!!" , sf::Style::Close | sf::Style::Titlebar);
     sf::Event _event;
     sf::Clock _clock;
-    GameDisplay game(renderWindow, _clock);
-    Level _level;
-    Update(renderWindow, _event, _clock, _level, game);
+    Level _level(_renderWindow);
+    Update(_renderWindow, _event, _clock, _level);
 }
 
 int main()
 {
-    srand(time(NULL));
     StartGame();
 }

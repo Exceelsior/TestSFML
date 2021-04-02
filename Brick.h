@@ -10,6 +10,7 @@ private:
 	int _life;
 	sf::Vector2f _size;
 	bool _hasBeenDestroyed;
+	int _scoreValue;
 
 public:
 
@@ -17,11 +18,12 @@ public:
 
 	//Constructeur
 	
-	Brick(sf::Vector2f position, sf::Vector2f size, int life);
+	Brick(sf::Vector2f position, sf::Vector2f size, int startLife);
 
 	void SetToDestroyed(bool isDestroyed) { _hasBeenDestroyed = isDestroyed; };
 	void TakeDamages(float damages);
 
 	bool CheckIfHasBeenDestroyed() { return _hasBeenDestroyed; };
 
+	int GetValue() { return _scoreValue; };
 };
